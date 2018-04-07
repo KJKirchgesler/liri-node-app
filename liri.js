@@ -5,6 +5,7 @@ var keys = require('./keys.js');
 var Twitter = require('twitter');
 var twitterHandle = 'clemmie0913';
 var client = new Twitter(keys.twitter);
+var commands = process.argv[2];
 
 
 
@@ -24,6 +25,18 @@ function myTweets() {
     });
 }
 
-myTweets();
+switch (commands) {
+    case "my-tweet":
+    case "my-tweets":
+    case "getTweet":
+    case "getTweets":
+    case "tweet":
+    case "tweets":
+    case "twitter":
+        myTweets();
+        break;
+    default: 
+		console.log("That's not a valid command");
+	}
 
 
