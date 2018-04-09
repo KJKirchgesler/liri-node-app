@@ -11,8 +11,11 @@ var client = new Twitter(keys.twitter);
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 
-//need request module for OMDB API request
+///Request module for OMDB API request
 var request = require('request');
+
+//fs variable to serve up random.txt for do-what-it-says command
+var fs = require('fs');
 
 //setting the command and input variables from the process.argv array
 var command = process.argv[2];
@@ -95,6 +98,31 @@ function movieThis(input) {
     });
 }
 
+function doWhatItSays() {
+    // Reads the random.txt file using the fs module
+    fs.readFile('./random.txt', 'utf8', function(error, data) {
+        if (error) {
+            console.log("Error: " + error);
+        } else {
+            var randomCommand = data.split(","); 
+            command = randomCommand[0].trim(); 
+            input = randomCommand[1].trim(); 
+
+            switch (command) {
+                case 'my-tweets':
+                    myTweets();
+                    break;
+                case 'spotify-this-song':
+                    spotifyThis(input);
+                    break;
+                case 'movie-this':
+                    movieThis(input);
+                    break;
+    
+	       }
+        }
+    })
+}
 
 //Switch set up to call the functions for each of LIRI's commands
 switch (command) {
@@ -107,8 +135,9 @@ switch (command) {
     case 'movie-this':
         movieThis(input);
         break;
+    case 'do-what-it-says':
+        doWhatItSays();
+        break;
     default: 
-		console.log("That's not a valid command");
-	}
-
-
+        console.log("That's not a valid command");
+    }
